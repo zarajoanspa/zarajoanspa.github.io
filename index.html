@@ -81,11 +81,11 @@
                     <img src="logo.png" class="w-12 h-12 md:w-14 md:w-14 rounded-full" alt="">
                     <a href="#" class="text-2xl font-bold text-yellow-400" id="main-title">Zarajoan Spa</a>
                 </div>
-                <div class="md:flex items-center hidden space-x-6">
-                    <a href="#services" class="text-gray-300 hover:text-yellow-400 transition-colors">Services</a>
-                    <a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors">About</a>
-                    <a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors">Contact</a>
-                    <input title="color-select" type="color" id="color-picker" value="#dec24e" class="w-8 h-8 rounded-full border-2 border-white cursor-pointer">
+                <div class="flex items-center space-x-6">
+                    <a href="#services" class="hidden md:block text-gray-300 hover:text-yellow-400 transition-colors">Services</a>
+                    <a href="#" class="hidden md:block text-gray-300 hover:text-yellow-400 transition-colors">About</a>
+                    <a href="#" class="hidden md:block text-gray-300 hover:text-yellow-400 transition-colors">Contact</a>
+                    <input md:flex title="color-select" type="color" id="color-picker" value="#dec24e" class="w-8 h-8 rounded-full border-2 border-white cursor-pointer">
                 </div>
             </nav>
         </header>
@@ -499,4 +499,5 @@
     </script>
 </body>
 </html>
+
 
