@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarajoan Body Massage & Spa</title>
+    <!-- Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- GLTFLoader for 3D model files -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        #three-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+        .header-bg {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+        .booking-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease-in-out;
+        }
+        #loading-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            z-index: 9;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-black text-white">
+
+    <!-- Loading message for 3D model -->
+    <div id="loading-message">Loading 3D model...</div>
+
+    <!-- 3D Canvas for Background -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Main Content Wrapper -->
+    <div class="content-layer min-h-screen">
+        <!-- Header -->
+        <header class="header-bg shadow-sm sticky top-0 z-50">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="flex gap-2 justify-center items-center">
+                    <img src="logo.png" class="w-12 h-12 md:w-14 md:w-14 rounded-full" alt="">
+                    <a href="#" class="text-2xl font-bold text-yellow-400" id="main-title">Zarajoan Spa</a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="#services" class="text-gray-300 hover:text-yellow-400 transition-colors">Services</a>
+                    <a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors">About</a>
+                    <a href="#" class="text-gray-300 hover:text-yellow-400 transition-colors">Contact</a>
+                    <input title="color-select" type="color" id="color-picker" value="#dec24e" class="w-8 h-8 rounded-full border-2 border-white cursor-pointer">
+                </div>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="py-24 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight">
+                Embrace Tranquility, Find Your Serenity.
+            </h1>
+            <p class="mt-4 text-lg text-gray-300">
+                A sanctuary for your body and soul.
+            </p>
+            <a href="#services" class="mt-8 inline-block bg-yellow-400 text-gray-900 font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-yellow-300 transition-colors">
+                Explore Our Services
+            </a>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-12 bg-black bg-opacity-70 backdrop-blur-md">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-10">Our Services</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                   
+                    <!-- Service Card 8 -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://static.vecteezy.com/system/resources/previews/044/650/490/non_2x/hot-stone-massage-therapy-on-back-with-skilled-practitioner-hands-photo.jpg?text=Hot+Stone+Massage" alt="Hot Stone Massage" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Hot Stone Massage</h3>
+                            <p class="text-gray-300 text-sm mb-4">Deeply relax and soothe tired muscles with warm volcanic stones.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Hot Stone Massage" data-price="105.00">Add to Booking</button>
+                        </div>
+                    </div>
+
+                    <!-- Special Touch -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3pI2HqjSM6mwj65EhtwX5IGbzn_dlqNlDHg&s/ffffff?text=Special+Touch" alt="Special Touch" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Special Touch</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦85,000</p>
+                            <p class="text-gray-300 text-sm mb-4">A luxurious experience for ultimate relaxation.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Special Touch" data-price="85000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Yoni Massage -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://t3.ftcdn.net/jpg/02/97/62/88/360_F_297628845_NuWi4ksVWusG2uVQmYDzIQAOMTzTCgxP.jpg?text=Yoni+Massage" alt="Yoni Massage" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Yoni Massage</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦40,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Holistic massage for feminine wellness.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Yoni Massage" data-price="40000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Swedish Massage -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://static.vecteezy.com/system/resources/previews/025/491/970/non_2x/relaxing-spa-treatment-women-enjoy-pampering-massage-therapy-indoors-generated-by-ai-free-photo.jpg?text=Swedish+Massage" alt="Swedish Massage" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Swedish Massage</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦25,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Classic massage for relaxation and stress relief.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Swedish Massage" data-price="25000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Deep Tissue -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://www.fisio.ae/wp-content/uploads/2024/11/Body-Draft_-Deep-Tissue-Massage_-TK-Health-Benefits-And-Risks_Img0.webp?text=Deep+Tissue" alt="Deep Tissue" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Deep Tissue</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦30,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Intense massage for muscle tension relief.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Deep Tissue" data-price="30000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Reflexology -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://msuk-1f835.kxcdn.com/wp-content/uploads/2023/03/MS-UK-Online.png?text=Reflexology" alt="Reflexology" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Reflexology</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦25,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Foot massage for overall wellness.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Reflexology" data-price="25000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Lingam -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://images.squarespace-cdn.com/content/v1/5d5d22f6dddf3e000155c30e/1651328133086-LDUCTJ95W6O2Y19Q5Q8U/unsplash-image-bzBHUpScrX4.jpg?text=Lingam" alt="Lingam" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Lingam</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦40,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Holistic massage for masculine wellness.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Lingam" data-price="40000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Nuru Massage -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://m.media-amazon.com/images/I/81YP9TvhcdL._UF894,1000_QL80_.jpg?text=Nuru+Massage" alt="Nuru Massage" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Nuru Massage</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦55,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Sensual massage with special gel.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Nuru Massage" data-price="55000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Erotic Massage -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="eroMas.png" alt="Erotic Massage" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Erotic Massage</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦45,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Intimate massage for deep relaxation.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Erotic Massage" data-price="45000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Facial consultation/products recommendations -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://dermatology.com.ng/wp-content/uploads/2025/05/healthcare-facial-consultation-doctor-with-patient-consulting-plastic-surgery-medical-cosmetology-black-woman-with-surgeon-cosmetic-treatment-hospital-medicare-clinic-1500x630.jpg?text=Facial+Consultation" alt="Facial Consultation" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Facial Consultation/Products Recommendations</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦5,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Expert advice for your skin care routine.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Facial Consultation/Products Recommendations" data-price="5000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Glow facials -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwy_sRlODoMXRG9TfmU2LT6NAtDlIdROf_45d7kiOR40AgG0ClHIOxNbMpA9dDgjyZ2EE&usqp=CAU?text=Glow+Facials" alt="Glow Facials" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Glow Facials</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦15,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Brighten and refresh your skin.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Glow Facials" data-price="15000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Acne facials -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://i.pinimg.com/736x/88/e9/b4/88e9b4f68b5765f19582882ffb0b7f94.jpg?text=Acne+Facials" alt="Acne Facials" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Acne Facials</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦30,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Targeted facial for acne-prone skin.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Acne Facials" data-price="30000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Dermaplaning -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRDQCBTrDRqMKhVhsDnDpiezOmTZFTmZDOmw&s?text=Dermaplaning" alt="Dermaplaning" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Dermaplaning</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦15,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Exfoliate and smooth your skin.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Dermaplaning" data-price="15000">Add to Booking</button>
+                        </div>
+                    </div>
+                    <!-- Hydrating facials -->
+                    <div class="service-card bg-white bg-opacity-10 rounded-lg shadow-lg overflow-hidden">
+                        <img src="https://lirp.cdn-website.com/698c692a/dms3rep/multi/opt/Benefits-of-a-Hydrating-Facial-640w.png?text=Hydrating+Facials" alt="Hydrating Facials" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-2">Hydrating Facials</h3>
+                            <p class="text-yellow-400 font-bold mb-2">₦20,000</p>
+                            <p class="text-gray-300 text-sm mb-4">Deep hydration for glowing skin.</p>
+                            <button class="add-to-booking-button w-full bg-yellow-400 text-gray-900 font-semibold py-2 rounded-full hover:bg-yellow-300 transition-colors" data-service="Hydrating Facials" data-price="20000">Add to Booking</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Floating Booking Button -->
+        <button id="booking-button" class="fixed bottom-8 right-8 bg-yellow-400 text-gray-900 p-4 rounded-full shadow-lg hover:bg-yellow-300 transition-transform duration-300 transform hover:scale-110">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h8m-8 4h8m-9 4h8m-11 0h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span id="booking-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2">0</span>
+        </button>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-gray-400 py-6 text-center mt-auto">
+            <p>&copy; 2024 Zarajoan Body Massage & Spa. All Rights Reserved.</p>
+            <p class="mt-2 text-sm">Find your serenity.</p>
+        </footer>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="booking-modal-overlay">
+        <div class="bg-gray-800 text-white p-8 rounded-lg shadow-2xl w-full max-w-lg mx-4 md:mx-auto relative">
+            <button id="close-booking-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">&times;</button>
+            <h2 class="text-2xl font-bold mb-4">Your Booking</h2>
+            <div id="booking-items" class="max-h-96 overflow-y-auto mb-4">
+                <!-- Booking items will be dynamically inserted here -->
+                <p id="empty-booking-message" class="text-gray-400 text-center">Your booking list is empty.</p>
+            </div>
+            <div class="border-t border-gray-700 pt-4 flex justify-between items-center">
+                <span id="booking-total" class="text-xl font-bold">Total: ₦0.00</span>
+                <button id="send-booking-button" class="bg-yellow-400 text-gray-900 font-semibold py-2 px-6 rounded-full hover:bg-yellow-300 transition-colors">
+                    Send Booking via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            // --- THREE.JS SCENE SETUP ---
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas'), antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
+            // GLTF Loader and human body model
+            let humanBody = null;
+            const loader = new THREE.GLTFLoader();
+            const loadingMessage = document.getElementById('loading-message');
+
+            // URL for a simple human body GLTF model
+            // You can replace this with your own hosted model
+            const modelUrl = 'scene.gltf';
+
+            loader.load(
+                modelUrl,
+                function (gltf) {
+                    humanBody = gltf.scene;
+                    scene.add(humanBody);
+                    humanBody.scale.set(10, 10, 10);
+                    humanBody.position.y = -1;
+                    humanBody.traverse(child => {
+                        if (child.isMesh) {
+                            child.material.color.set(document.getElementById('color-picker').value);
+                        }
+                    });
+                    loadingMessage.style.display = 'none';
+                },
+                undefined,
+                function (error) {
+                    console.error('An error occurred loading the model', error);
+                    loadingMessage.textContent = 'Error loading 3D model.';
+                }
+            );
+
+            camera.position.z = 10;
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+                if (humanBody) {
+                    humanBody.rotation.y += 0.005;
+                    humanBody.position.y = Math.sin(Date.now() * 0.0005) * 0.25 - 1;
+                }
+                renderer.render(scene, camera);
+            }
+
+            // Handle window resize
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+            window.addEventListener('resize', onWindowResize, false);
+            
+            animate();
+
+            // --- THEME COLOR CUSTOMIZATION ---
+            const colorPicker = document.getElementById('color-picker');
+            const mainTitle = document.getElementById('main-title');
+            
+            colorPicker.addEventListener('input', (event) => {
+                const color = event.target.value;
+                if (humanBody) {
+                    humanBody.traverse(child => {
+                        if (child.isMesh) {
+                            child.material.color.set(color);
+                        }
+                    });
+                }
+
+                // Update Tailwind classes for dynamic color change
+                function updateColors(newColor) {
+                    mainTitle.style.color = newColor;
+                    document.querySelectorAll('.add-to-booking-button, .bg-yellow-400').forEach(el => {
+                        el.style.backgroundColor = newColor;
+                        el.style.borderColor = newColor;
+                    });
+                    document.querySelectorAll('.hover\\:bg-yellow-300').forEach(el => {
+                        // A simple hover effect for the dynamically colored buttons
+                        el.addEventListener('mouseenter', () => el.style.backgroundColor = newColor);
+                        el.addEventListener('mouseleave', () => el.style.backgroundColor = newColor);
+                    });
+                }
+                updateColors(color);
+            });
+
+            // Initial color update
+            function updateColors(newColor) {
+                mainTitle.style.color = newColor;
+                document.querySelectorAll('.add-to-booking-button, .bg-yellow-400').forEach(el => {
+                    el.style.backgroundColor = newColor;
+                    el.style.borderColor = newColor;
+                });
+                document.querySelectorAll('.hover\\:bg-yellow-300').forEach(el => {
+                    // A simple hover effect for the dynamically colored buttons
+                    el.addEventListener('mouseenter', () => el.style.backgroundColor = newColor);
+                    el.addEventListener('mouseleave', () => el.style.backgroundColor = newColor);
+                });
+            }
+            updateColors(colorPicker.value);
+
+
+            // --- BOOKING CART FUNCTIONALITY ---
+            
+            let booking = [];
+            const bookingButton = document.getElementById('booking-button');
+            const bookingCountSpan = document.getElementById('booking-count');
+            const bookingModal = document.getElementById('booking-modal');
+            const closeBookingModalButton = document.getElementById('close-booking-modal');
+            const bookingItemsContainer = document.getElementById('booking-items');
+            const bookingTotalSpan = document.getElementById('booking-total');
+            const sendBookingButton = document.getElementById('send-booking-button');
+
+            document.querySelectorAll('.add-to-booking-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const serviceName = event.target.getAttribute('data-service');
+                    const servicePrice = parseFloat(event.target.getAttribute('data-price'));
+                    addToBooking({ name: serviceName, price: servicePrice });
+                });
+            });
+
+            function addToBooking(service) {
+                const existingItem = booking.find(item => item.name === service.name);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    booking.push({ ...service, quantity: 1 });
+                }
+                updateBookingUI();
+            }
+
+            function updateBookingUI() {
+                bookingCountSpan.textContent = booking.reduce((total, item) => total + item.quantity, 0);
+            }
+
+            function renderBooking() {
+                bookingItemsContainer.innerHTML = '';
+                if (booking.length === 0) {
+                    bookingItemsContainer.innerHTML = '<p id="empty-booking-message" class="text-gray-400 text-center">Your booking list is empty.</p>';
+                    bookingTotalSpan.textContent = 'Total: ₦0.00';
+                    return;
+                }
+
+                let total = 0;
+                booking.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('flex', 'justify-between', 'items-center', 'mb-2');
+                    itemElement.innerHTML = `
+                        <div>
+                            <p class="text-sm font-semibold">${item.name} (${item.quantity})</p>
+                            <p class="text-xs text-gray-400">₦${item.price.toFixed(2)} each</p>
+                        </div>
+                        <span class="text-sm font-semibold">₦${(item.price * item.quantity).toFixed(2)}</span>
+                    `;
+                    bookingItemsContainer.appendChild(itemElement);
+                    total += item.price * item.quantity;
+                });
+
+                bookingTotalSpan.textContent = `Total: ₦${total.toFixed(2)}`;
+            }
+
+            function showBookingModal() {
+                renderBooking();
+                bookingModal.style.display = 'flex';
+            }
+
+            function hideBookingModal() {
+                bookingModal.style.display = 'none';
+            }
+
+            function sendBookingToWhatsApp() {
+                const whatsappNumber = '+2348177141556';
+                
+                let message = `Hello Zarajoan Spa, I would like to book the following services:\n\n`;
+                let total = 0;
+
+                if (booking.length === 0) {
+                     alert("Your booking list is empty. Please add services first.");
+                     return;
+                }
+
+                booking.forEach(item => {
+                    message += `* ${item.name} x${item.quantity} - ₦${(item.price * item.quantity).toFixed(2)}\n`;
+                    total += item.price * item.quantity;
+                });
+
+                message += `\n*Total Estimated Cost:* ₦${total.toFixed(2)}\n\n`;
+                message += `Please confirm availability for these services.`;
+
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+                window.open(whatsappUrl, '_blank');
+            }
+
+            bookingButton.addEventListener('click', showBookingModal);
+            closeBookingModalButton.addEventListener('click', hideBookingModal);
+            sendBookingButton.addEventListener('click', sendBookingToWhatsApp);
+        };
+    </script>
+</body>
+</html>
